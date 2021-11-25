@@ -276,20 +276,22 @@ public class Cas20ServiceTicketValidator extends AbstractCasProtocolUrlBasedTick
                 this.foundAttributes = false;
                 this.currentAttribute = null;
             } else if (this.foundAttributes) {
-                final Object o = this.attributes.get(this.currentAttribute);
+                if (!(this.value.toString().isEmpty())) {
+                    final Object o = this.attributes.get(this.currentAttribute);
 
-                if (o == null) {
-                    this.attributes.put(this.currentAttribute, this.value.toString());
-                } else {
-                    final List<Object> items;
-                    if (o instanceof List) {
-                        items = (List<Object>) o;
+                    if (o == null) {
+                        this.attributes.put(this.currentAttribute, this.value.toString());
                     } else {
-                        items = new LinkedList<Object>();
-                        items.add(o);
-                        this.attributes.put(this.currentAttribute, items);
+                        final List<Object> items;
+                        if (o instanceof List) {
+                            items = (List<Object>) o;
+                        } else {
+                            items = new LinkedList<Object>();
+                            items.add(o);
+                            this.attributes.put(this.currentAttribute, items);
+                        }
+                        items.add(this.value.toString());
                     }
-                    items.add(this.value.toString());
                 }
             }
         }
